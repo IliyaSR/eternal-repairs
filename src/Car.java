@@ -11,8 +11,8 @@ class Car extends Vehicle {
         PETROL
     }
 
-    final LocalDate nowDate = LocalDate.now();
-    final LocalDate negativeYear = LocalDate.parse("0000-00-00");
+    static final LocalDate nowDate = LocalDate.now();
+    static final LocalDate negativeYear = LocalDate.parse("0000-12-12");
 
     float fuelConsumption;
     int tankCapacity;
@@ -68,7 +68,7 @@ class Car extends Vehicle {
         return dateOfReview;
     }
 
-    public boolean validateSpecies(String species) {
+    public static boolean validateSpecies(String species) {
         if (species.length() > 100) {
             System.out.println("Species can't be longer than 100 chars!");
             return false;
@@ -80,7 +80,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateRegistrationNumber(String registrationNumber) {
+    public static boolean validateRegistrationNumber(String registrationNumber) {
         if (registrationNumber.length() > 10) {
             System.out.println("Registration number can't be longer than 10 chars!");
             return false;
@@ -92,7 +92,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateBrand(String brand) {
+    public static boolean validateBrand(String brand) {
         if (brand.length() > 20) {
             System.out.println("Brand can't be longer than 20 chars!");
             return false;
@@ -104,7 +104,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateModel(String model) {
+    public static boolean validateModel(String model) {
         if (model.length() > 20) {
             System.out.println("Model can't be longer than 20 chars!");
             return false;
@@ -116,7 +116,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateFuelConsumption(float FuelConsumption) {
+    public static boolean validateFuelConsumption(float fuelConsumption) {
         if (fuelConsumption <= 0) {
             System.out.println("The fuel consumption can't be lower than 1!");
             return false;
@@ -124,7 +124,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateTankCapacity(int tankCapacity) {
+    public static boolean validateTankCapacity(int tankCapacity) {
         if (tankCapacity <= 0) {
             System.out.println("The tank capacity can't be lower than 1!");
             return false;
@@ -132,7 +132,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateHorsePower(int horsePower){
+    public static boolean validateHorsePower(int horsePower){
         if(horsePower < 0){
             System.out.println("The horse power can't be negative number!");
             return false;
@@ -140,7 +140,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateDates(LocalDate allDates){
+    public static boolean validateDates(LocalDate allDates){
         if(nowDate.isBefore(allDates)){
             System.out.println("Date can't be in the future!");
             return false;
@@ -152,7 +152,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateDateOfChangeTires(LocalDate dateOfChangeTires){
+    public static boolean validateDateOfChangeTires(LocalDate dateOfChangeTires){
         if(dateOfChangeTires.isBefore(nowDate)){
             System.out.println("The date can't be in the past!");
             return false;
@@ -160,7 +160,7 @@ class Car extends Vehicle {
         return true;
     }
 
-    public boolean validateChangeOilKilometers(int kilometersChangeOil){
+    public static boolean validateChangeOilKilometers(int kilometersChangeOil){
         if(kilometersChangeOil < 0){
             System.out.println("The kilometers can't be negative number!");
             return false;
