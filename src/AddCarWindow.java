@@ -2,15 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class AddCarWindow extends JFrame implements ActionListener {
 
     String[] typeFuel = {"DIESEL", "PETROL"};
+    String[] gearType = {"AUTOMATIC", "MANUAL"};
 
     JButton submitButton;
 
     JComboBox<String> typeFuelBox = new JComboBox<>(typeFuel);
+    JComboBox<String> gearTypeBox = new JComboBox<>(gearType);
 
     JTextField registrationField = new JTextField();
     JTextField speciesField = new JTextField();
@@ -19,7 +23,6 @@ public class AddCarWindow extends JFrame implements ActionListener {
     JTextField tankCapacityField = new JTextField();
     JTextField fuelConsumptionField = new JTextField();
     JTextField horsePowerField = new JTextField();
-    JTextField gearBoxField = new JTextField();
     JTextField dateOfCreationField = new JTextField();
     JTextField dateOfRegistrationField = new JTextField();
     JTextField insuranceDateField = new JTextField();
@@ -45,9 +48,9 @@ public class AddCarWindow extends JFrame implements ActionListener {
     JLabel kilometersEngineOilErrorLabel = new JLabel();
 
     AddCarWindow() {
-
+        ;
         setTitle("Add car");
-        setSize(700, 800);
+        setSize(700, 900);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -69,10 +72,10 @@ public class AddCarWindow extends JFrame implements ActionListener {
         vehicleDetailsPanel.add(createPanel("Brand", brandField, brandErrorLabel));
         vehicleDetailsPanel.add(createPanel("Model", modelField, fuelConsumptionErrorLabel));
         vehicleDetailsPanel.add(createPanel("Tank capacity", tankCapacityField, tankCapacityErrorLabel));
-        vehicleDetailsPanel.add(createPanel("Type fuel", typeFuelBox, typeFuelErrorLabel));
+        vehicleDetailsPanel.add(createPanelComboBox("Type fuel", typeFuelBox, typeFuelErrorLabel));
         vehicleDetailsPanel.add(createPanel("Fuel consumption", fuelConsumptionField, fuelConsumptionErrorLabel));
         vehicleDetailsPanel.add(createPanel("Horse power", horsePowerField, horsePowerErrorLabel));
-        vehicleDetailsPanel.add(createPanel("Gear Box", gearBoxField, gearBoxErrorLabel));
+        vehicleDetailsPanel.add(createPanelComboBox("Gear Box", gearTypeBox, gearBoxErrorLabel));
         vehicleDetailsPanel.add(createPanel("Date of creation", dateOfCreationField, dateOfCreationErrorLabel));
         vehicleDetailsPanel.add(createPanel("Date of registration", dateOfRegistrationField, dateOfRegistrationErrorLabel));
         vehicleDetailsPanel.add(createPanel("Insurance date", insuranceDateField, insuranceDateErrorLabel));
@@ -82,7 +85,7 @@ public class AddCarWindow extends JFrame implements ActionListener {
 
         addCarPanel.add(submitButton);
 
-        vehicleDetailsPanel.setPreferredSize(new Dimension(400, 650));
+        vehicleDetailsPanel.setPreferredSize(new Dimension(400, 850));
         addCarPanel.add(vehicleDetailsPanel);
 
 
@@ -132,6 +135,17 @@ public class AddCarWindow extends JFrame implements ActionListener {
         return panel;
     }
 
+    public JPanel createPanelComboBox(String labelText, JComboBox comboBox, JLabel anyLabel) {
+        JPanel panel = new JPanel(new GridLayout(3, 1));
+        JLabel label = new JLabel(labelText);
+        comboBox.setPreferredSize(new Dimension(140, 25));
+        panel.add(label);
+        panel.add(comboBox);
+        panel.add(anyLabel);
+
+        return panel;
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
             String registrationNumber = validateAndGet(registrationField, Car::validateRegistrationNumber, registrationErrorLabel);
@@ -140,11 +154,31 @@ public class AddCarWindow extends JFrame implements ActionListener {
             String model = validateAndGet(modelField, Car::validateModel, modelErrorLabel);
             float fuelConsumption = validateAndGetInt(fuelConsumptionField, Car::validateFuelConsumption, fuelConsumptionErrorLabel);
             int tankCapacity = validateAndGetInt(tankCapacityField, Car::validateTankCapacity, tankCapacityErrorLabel);
+            Car.TypeFuel typeFuel = Car.TypeFuel.valueOf(Objects.requireNonNull(typeFuelBox.getSelectedItem()).toString());
+            int horsePower = validateAndGetInt(horsePowerField, Car::validateHorsePower, horsePowerErrorLabel);
+            Car.GearBoxType gearBoxType = Car.GearBoxType.valueOf(Objects.requireNonNull(gearTypeBox.getSelectedItem()).toString());
+            LocalDate dateOfCreation = validateAndGetDate(dateOfCreationField, Car::validateDates, dateOfCreationErrorLabel);
+            LocalDate dateOfRegistration = validateAndGetDate(dateOfRegistrationField, Car::validateDates, dateOfRegistrationErrorLabel);
+            LocalDate insuranceDate = validateAndGetDate(insuranceDateField, Car::validateDates, insuranceDateErrorLabel);
+            LocalDate dateOfReview = validateAndGetDate(dateOfReviewField, Car::validateDates, dateOfReviewErrorLabel);
+            LocalDate dateOfChangeTires = validateAndGetDate(dateOfChangeTiresField, Car::validateDateOfChangeTires, dateOfChangeTiresErrorLabel);
+            int kilometersChangeOil = validateAndGetInt(kilometersField, Car::validateChangeOilKilometers, kilometersEngineOilErrorLabel);
         }
     }
 
     private String validateAndGet(JTextField field, Function<String, Boolean> validator, JLabel label) {
         String text = field.getText();
+        label.setForeground(Color.red);
+        if (!validator.apply(text)) {
+            label.setText("Error");
+            return null;
+        }
+        label.setText("");
+        return text;
+    }
+
+    private LocalDate validateAndGetDate(JTextField field, Function<LocalDate, Boolean> validator, JLabel label) {
+        LocalDate text = LocalDate.parse(field.getText());
         label.setForeground(Color.red);
         if (!validator.apply(text)) {
             label.setText("Error");
