@@ -8,10 +8,16 @@ import java.util.function.Function;
 
 public class AddCarWindow extends JFrame implements ActionListener {
 
+    boolean ready = true;
+
     String[] typeFuel = {"DIESEL", "PETROL"};
     String[] gearType = {"AUTOMATIC", "MANUAL"};
 
     JButton submitButton;
+    JButton addButton;
+    JButton deleteButton;
+    JButton updateButton;
+    JButton showButton;
 
     JComboBox<String> typeFuelBox = new JComboBox<>(typeFuel);
     JComboBox<String> gearTypeBox = new JComboBox<>(gearType);
@@ -48,9 +54,9 @@ public class AddCarWindow extends JFrame implements ActionListener {
     JLabel kilometersEngineOilErrorLabel = new JLabel();
 
     AddCarWindow() {
-        ;
+
         setTitle("Add car");
-        setSize(700, 900);
+        setSize(700, 950);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -70,7 +76,7 @@ public class AddCarWindow extends JFrame implements ActionListener {
         vehicleDetailsPanel.add(createPanel("Registration number", registrationField, registrationErrorLabel));
         vehicleDetailsPanel.add(createPanel("Species", speciesField, speciesErrorLabel));
         vehicleDetailsPanel.add(createPanel("Brand", brandField, brandErrorLabel));
-        vehicleDetailsPanel.add(createPanel("Model", modelField, fuelConsumptionErrorLabel));
+        vehicleDetailsPanel.add(createPanel("Model", modelField, modelErrorLabel));
         vehicleDetailsPanel.add(createPanel("Tank capacity", tankCapacityField, tankCapacityErrorLabel));
         vehicleDetailsPanel.add(createPanelComboBox("Type fuel", typeFuelBox, typeFuelErrorLabel));
         vehicleDetailsPanel.add(createPanel("Fuel consumption", fuelConsumptionField, fuelConsumptionErrorLabel));
@@ -107,10 +113,11 @@ public class AddCarWindow extends JFrame implements ActionListener {
         boxPanel.add(selectSearch);
 
         JPanel selectPanelButtons = new JPanel(new GridLayout(4, 1, 50, 50));
-        JButton addButton = new JButton("Add car");
-        JButton deleteButton = new JButton("Delete car");
-        JButton updateButton = new JButton("Update car");
-        JButton showButton = new JButton("Show cars");
+        addButton = new JButton("Add car");
+        deleteButton = new JButton("Delete car");
+        updateButton = new JButton("Update car");
+        showButton = new JButton("Show cars");
+        addButton.addActionListener(this);
         selectPanelButtons.add(addButton);
         selectPanelButtons.add(deleteButton);
         selectPanelButtons.add(updateButton);
@@ -147,9 +154,16 @@ public class AddCarWindow extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        ready = true;
+
+        if(e.getSource() == addButton ){
+            dispose();
+            new AddCarWindow();
+        }
+
         if (e.getSource() == submitButton) {
-            String registrationNumber = validateAndGet(registrationField, Car::validateRegistrationNumber, registrationErrorLabel);
             String species = validateAndGet(speciesField, Car::validateSpecies, speciesErrorLabel);
+            String registrationNumber = validateAndGet(registrationField, Car::validateRegistrationNumber, registrationErrorLabel);
             String brand = validateAndGet(brandField, Car::validateBrand, brandErrorLabel);
             String model = validateAndGet(modelField, Car::validateModel, modelErrorLabel);
             float fuelConsumption = validateAndGetInt(fuelConsumptionField, Car::validateFuelConsumption, fuelConsumptionErrorLabel);
@@ -163,6 +177,19 @@ public class AddCarWindow extends JFrame implements ActionListener {
             LocalDate dateOfReview = validateAndGetDate(dateOfReviewField, Car::validateDates, dateOfReviewErrorLabel);
             LocalDate dateOfChangeTires = validateAndGetDate(dateOfChangeTiresField, Car::validateDateOfChangeTires, dateOfChangeTiresErrorLabel);
             int kilometersChangeOil = validateAndGetInt(kilometersField, Car::validateChangeOilKilometers, kilometersEngineOilErrorLabel);
+
+            if (ready) {
+                Car car = new Car(species, registrationNumber, brand, model, fuelConsumption, tankCapacity,
+                        typeFuel, horsePower, gearBoxType, dateOfCreation, dateOfRegistration,
+                        insuranceDate, dateOfReview, dateOfChangeTires, kilometersChangeOil);
+
+                Main.cars.add(car);
+
+                System.out.println(Main.cars);
+
+                dispose();
+                new MainWindow();
+            }
         }
     }
 
@@ -171,6 +198,7 @@ public class AddCarWindow extends JFrame implements ActionListener {
         label.setForeground(Color.red);
         if (!validator.apply(text)) {
             label.setText("Error");
+            ready = false;
             return null;
         }
         label.setText("");
@@ -178,10 +206,16 @@ public class AddCarWindow extends JFrame implements ActionListener {
     }
 
     private LocalDate validateAndGetDate(JTextField field, Function<LocalDate, Boolean> validator, JLabel label) {
-        LocalDate text = LocalDate.parse(field.getText());
         label.setForeground(Color.red);
+        if (field.getText().isEmpty()) {
+            label.setText("Error");
+            ready = false;
+            return null;
+        }
+        LocalDate text = LocalDate.parse(field.getText());
         if (!validator.apply(text)) {
             label.setText("Error");
+            ready = false;
             return null;
         }
         label.setText("");
@@ -195,12 +229,14 @@ public class AddCarWindow extends JFrame implements ActionListener {
             int value = Integer.parseInt(text);
             if (!validator.apply(value)) {
                 label.setText("Error");
+                ready = false;
                 return 0;
             }
             label.setText("");
             return value;
         } else {
             label.setText("Error");
+            ready = false;
             return 0;
         }
     }
