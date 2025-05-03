@@ -2,10 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainWindow extends JFrame implements ActionListener {
 
+    static List<Car> foundCars = new ArrayList<>();
+
     JButton addButton;
+    JButton searchButton;
+    JComboBox<String> selectSearch;
+    JTextField searchField;
 
     static String[] searchCategories = {
             "Registration number",
@@ -28,11 +36,16 @@ public class MainWindow extends JFrame implements ActionListener {
         JPanel titlePanel = new JPanel();
         titlePanel.add(title);
 
+        JPanel boxPanel = new JPanel(new GridLayout(4, 1, 13, 13));
         JLabel searchLabel = new JLabel("Search by:");
-        JComboBox<String> selectSearch = new JComboBox<>(searchCategories);
-        JPanel boxPanel = new JPanel(new GridLayout(2, 1, 4, 4));
+        selectSearch = new JComboBox<>(searchCategories);
+        searchField = new JTextField();
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(this);
         boxPanel.add(searchLabel);
         boxPanel.add(selectSearch);
+        boxPanel.add(searchField);
+        boxPanel.add(searchButton);
 
         addButton = new JButton("Add car");
         addButton.addActionListener(this);
@@ -65,6 +78,41 @@ public class MainWindow extends JFrame implements ActionListener {
         if (e.getSource() == addButton) {
             dispose();
             new AddCarWindow();
+        }
+
+        if (e.getSource() == searchButton) {
+            String searchingParameter = (String) selectSearch.getSelectedItem();
+            String textBySearchingField = searchField.getText();
+
+            for (Car car : Main.cars) {
+                switch (searchingParameter) {
+                    case "Registration number":
+                        if (car.registrationNumber.contains(textBySearchingField)) {
+                            foundCars.add(car);
+                            break;
+                        }
+                    case "Brand":
+                        if (car.brand.contains(textBySearchingField)) {
+                            foundCars.add(car);
+                            break;
+                        }
+                    case "Model":
+                        if (car.model.contains(textBySearchingField)) {
+                            foundCars.add(car);
+                            break;
+                        }
+                    case "Insurance date":
+                        if (car.insuranceDate.isEqual(LocalDate.parse(textBySearchingField))) {
+                            foundCars.add(car);
+                            break;
+                        }
+                    case "Date of registration":
+                        if (car.dateOfRegistration.isEqual(LocalDate.parse(textBySearchingField))) {
+                            foundCars.add(car);
+                            break;
+                        }
+                }
+            }
         }
     }
 }
