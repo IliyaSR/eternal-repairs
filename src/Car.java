@@ -132,44 +132,41 @@ class Car extends Vehicle {
         return true;
     }
 
-    public static boolean validateHorsePower(int horsePower){
-        if(horsePower < 0){
+    public static boolean validateHorsePower(int horsePower) {
+        if (horsePower < 0) {
             System.out.println("The horse power can't be negative number!");
             return false;
         }
         return true;
     }
 
-    public static boolean validateDates(LocalDate allDates){
-        if(nowDate.isBefore(allDates)){
+    public static boolean validateDates(LocalDate allDates) {
+        if (nowDate.isBefore(allDates)) {
             System.out.println("Date can't be in the future!");
             return false;
         }
-        if(allDates.isBefore(negativeYear)){
+        if (allDates.isBefore(negativeYear)) {
             System.out.println("Date can't be negative!");
             return false;
         }
         return true;
     }
 
-    public static boolean validateDateOfChangeTires(LocalDate dateOfChangeTires){
-        if(dateOfChangeTires.isBefore(nowDate)){
+    public static boolean validateDateOfChangeTires(LocalDate dateOfChangeTires) {
+        if (dateOfChangeTires.isBefore(nowDate)) {
             System.out.println("The date can't be in the past!");
             return false;
         }
         return true;
     }
 
-    public static boolean validateChangeOilKilometers(int kilometersChangeOil){
-        if(kilometersChangeOil < 0){
+    public static boolean validateChangeOilKilometers(int kilometersChangeOil) {
+        if (kilometersChangeOil < 0) {
             System.out.println("The kilometers can't be negative number!");
             return false;
         }
         return true;
     }
-
-
-
 
 
 }
