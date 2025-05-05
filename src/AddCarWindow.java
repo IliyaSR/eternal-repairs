@@ -14,10 +14,10 @@ public class AddCarWindow extends JFrame implements ActionListener {
     String[] gearType = {"AUTOMATIC", "MANUAL"};
 
     JButton submitButton;
-    JButton addButton;
-    JButton deleteButton;
-    JButton updateButton;
-    JButton showButton;
+    static JButton addButton;
+    static JButton deleteButton;
+    static JButton updateButton;
+    static JButton showButton;
 
     JComboBox<String> typeFuelBox = new JComboBox<>(typeFuel);
     JComboBox<String> gearTypeBox = new JComboBox<>(gearType);
@@ -99,11 +99,13 @@ public class AddCarWindow extends JFrame implements ActionListener {
         mainPanel.add(createSelectPanel(), BorderLayout.WEST);
         mainPanel.add(addCarPanel, BorderLayout.CENTER);
 
+        addButton.addActionListener(this);
+
         add(mainPanel);
         setVisible(true);
     }
 
-    public JPanel createSelectPanel() {
+    static public JPanel createSelectPanel() {
         JPanel selectPanel = new JPanel(new BorderLayout());
 
         JPanel boxPanel = new JPanel(new GridLayout(2, 1, 4, 4));
@@ -117,7 +119,6 @@ public class AddCarWindow extends JFrame implements ActionListener {
         deleteButton = new JButton("Delete car");
         updateButton = new JButton("Update car");
         showButton = new JButton("Show cars");
-        addButton.addActionListener(this);
         selectPanelButtons.add(addButton);
         selectPanelButtons.add(deleteButton);
         selectPanelButtons.add(updateButton);
@@ -184,8 +185,6 @@ public class AddCarWindow extends JFrame implements ActionListener {
                         insuranceDate, dateOfReview, dateOfChangeTires, kilometersChangeOil);
 
                 Main.cars.add(car);
-
-                System.out.println(Main.cars);
 
                 dispose();
                 new MainWindow();
