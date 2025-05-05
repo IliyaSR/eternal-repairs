@@ -14,6 +14,7 @@ public class MainWindow extends JFrame implements ActionListener {
     JButton searchButton;
     JComboBox<String> selectSearch;
     JTextField searchField;
+    JLabel errorLabel;
 
     static String[] searchCategories = {
             "Registration number",
@@ -25,7 +26,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
     public MainWindow() {
         setTitle("Home page");
-        setSize(700, 800);
+        setSize(700, 950);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -36,16 +37,18 @@ public class MainWindow extends JFrame implements ActionListener {
         JPanel titlePanel = new JPanel();
         titlePanel.add(title);
 
-        JPanel boxPanel = new JPanel(new GridLayout(4, 1, 13, 13));
+        JPanel boxPanel = new JPanel(new GridLayout(5, 1, 13, 13));
         JLabel searchLabel = new JLabel("Search by:");
         selectSearch = new JComboBox<>(searchCategories);
         searchField = new JTextField();
         searchButton = new JButton("Search");
         searchButton.addActionListener(this);
+        errorLabel = new JLabel();
         boxPanel.add(searchLabel);
         boxPanel.add(selectSearch);
         boxPanel.add(searchField);
         boxPanel.add(searchButton);
+        boxPanel.add(errorLabel);
 
         addButton = new JButton("Add car");
         addButton.addActionListener(this);
@@ -81,6 +84,7 @@ public class MainWindow extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == searchButton) {
+            boolean foundCar = false;
             String searchingParameter = (String) selectSearch.getSelectedItem();
             String textBySearchingField = searchField.getText();
 
@@ -89,29 +93,42 @@ public class MainWindow extends JFrame implements ActionListener {
                     case "Registration number":
                         if (car.registrationNumber.contains(textBySearchingField)) {
                             foundCars.add(car);
+                            foundCar = true;
                             break;
                         }
                     case "Brand":
                         if (car.brand.contains(textBySearchingField)) {
                             foundCars.add(car);
+                            foundCar = true;
                             break;
                         }
                     case "Model":
                         if (car.model.contains(textBySearchingField)) {
                             foundCars.add(car);
+                            foundCar = true;
                             break;
                         }
                     case "Insurance date":
-                        if (car.insuranceDate.isEqual(LocalDate.parse(textBySearchingField))) {
+                        if (car.getInsuranceDate().isEqual(LocalDate.parse(textBySearchingField))) {
                             foundCars.add(car);
+                            foundCar = true;
                             break;
                         }
                     case "Date of registration":
-                        if (car.dateOfRegistration.isEqual(LocalDate.parse(textBySearchingField))) {
+                        if (car.getDateOfRegistration().isEqual(LocalDate.parse(textBySearchingField))) {
                             foundCars.add(car);
+                            foundCar = true;
                             break;
                         }
                 }
+            }
+
+            if(!foundCar){
+                errorLabel.setForeground(Color.red);
+                errorLabel.setText("Not found");
+            }else{
+                dispose();
+                new CarDetailsWindow();
             }
         }
     }
