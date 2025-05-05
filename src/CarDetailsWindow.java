@@ -64,9 +64,9 @@ public class CarDetailsWindow extends JFrame implements ActionListener {
             dateOfCreation = new JTextField();
             dateOfCreation.setText(String.valueOf(MainWindow.foundCars.getFirst().dateOfCreation));
             dateOfRegistration = new JTextField();
-            dateOfRegistration.setText(String.valueOf(MainWindow.foundCars.getFirst().dateOfRegistration));
+            dateOfRegistration.setText(String.valueOf(MainWindow.foundCars.getFirst().getDateOfRegistration()));
             insuranceDate = new JTextField();
-            insuranceDate.setText(String.valueOf(MainWindow.foundCars.getFirst().insuranceDate));
+            insuranceDate.setText(String.valueOf(MainWindow.foundCars.getFirst().getInsuranceDate()));
             dateOfReview = new JTextField();
             dateOfReview.setText(String.valueOf(MainWindow.foundCars.getFirst().getDateOfReview()));
             dateOfChangeTires = new JTextField();
