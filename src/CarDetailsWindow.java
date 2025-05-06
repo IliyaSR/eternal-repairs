@@ -21,8 +21,9 @@ public class CarDetailsWindow extends JFrame implements ActionListener {
     JTextField dateOfChangeTires;
     JTextField kilometersChangeOil;
 
+    static JButton homeButton;
     static JButton deleteButton;
-    static JButton updateButton;
+    static JButton showButton;
 
     public CarDetailsWindow() {
         setTitle("Car Details");
@@ -131,8 +132,9 @@ public class CarDetailsWindow extends JFrame implements ActionListener {
         mainPanel.add(createSelectPanel(), BorderLayout.WEST);
         mainPanel.add(carDetails, BorderLayout.CENTER);
 
+        homeButton.addActionListener(this);
         deleteButton.addActionListener(this);
-        updateButton.addActionListener(this);
+        showButton.addActionListener(this);
 
         add(mainPanel);
         setVisible(true);
@@ -147,20 +149,15 @@ public class CarDetailsWindow extends JFrame implements ActionListener {
     static public JPanel createSelectPanel() {
         JPanel selectPanel = new JPanel(new BorderLayout());
 
-        JPanel boxPanel = new JPanel(new GridLayout(2, 1, 4, 4));
-        JLabel searchLabel = new JLabel("Search by:");
-        JComboBox<String> selectSearch = new JComboBox<>(MainWindow.searchCategories);
-        boxPanel.add(searchLabel);
-        boxPanel.add(selectSearch);
-
-        JPanel selectPanelButtons = new JPanel(new GridLayout(4, 1, 50, 50));
+        JPanel selectPanelButtons = new JPanel(new GridLayout(3, 1, 50, 50));
+        homeButton = new JButton("Home");
         deleteButton = new JButton("Delete car");
-        updateButton = new JButton("Update car");
+        showButton = new JButton("Show cars");
+        selectPanelButtons.add(homeButton);
         selectPanelButtons.add(deleteButton);
-        selectPanelButtons.add(updateButton);
+        selectPanelButtons.add(showButton);
 
-        selectPanel.add(boxPanel, BorderLayout.NORTH);
-        selectPanel.add(selectPanelButtons, BorderLayout.SOUTH);
+        selectPanel.add(selectPanelButtons, BorderLayout.NORTH);
 
         selectPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
 
@@ -174,9 +171,13 @@ public class CarDetailsWindow extends JFrame implements ActionListener {
             new MainWindow();
         }
 
-        if(e.getSource() == updateButton){
+        if (e.getSource() == showButton) {
+            new AvailableCarsWindow();
+        }
+
+        if (e.getSource() == homeButton) {
             dispose();
-            new UpdateCarWindow();
+            new MainWindow();
         }
     }
 }
