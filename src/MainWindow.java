@@ -15,6 +15,7 @@ public class MainWindow extends JFrame implements ActionListener {
     JComboBox<String> selectSearch;
     JTextField searchField;
     JLabel errorLabel;
+    JButton showButton;
 
     static String[] searchCategories = {
             "Registration number",
@@ -52,7 +53,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
         addButton = new JButton("Add car");
         addButton.addActionListener(this);
-        JButton showButton = new JButton("Show cars");
+        showButton = new JButton("Show cars");
+        showButton.addActionListener(this);
         JPanel sectionPanelButtons = new JPanel(new GridLayout(2, 1, 50, 50));
         sectionPanelButtons.add(addButton);
         sectionPanelButtons.add(showButton);
@@ -130,6 +132,10 @@ public class MainWindow extends JFrame implements ActionListener {
                 dispose();
                 new CarDetailsWindow();
             }
+        }
+
+        if(e.getSource() == showButton){
+            new AvailableCarsWindow();
         }
     }
 }
